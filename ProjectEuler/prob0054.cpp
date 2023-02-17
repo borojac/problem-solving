@@ -72,16 +72,16 @@ int evaluate(vector<Card> h) {
 
     bool first4 = true;
     for (int i = 1; i < 4; i++) {
-        if (vals[i] - vals[i - 1] != 1) first4 = false;
+        if (vals[i] - vals[i - 1] != 1 && !(vals[i] == 12 && vals[i - 1] == 10)) first4 = false;
     }
     bool isStraight = false;
-    if (first4 && vals.back() == 16 && vals[0] == 2) isStraight = true;
-    if (first4 && vals.back() - vals[3] == 1) isStraight = true;
+    if (first4 && vals.back() == 15 && vals[0] == 2) isStraight = true;
+    if (first4 && (vals.back() - vals[3] == 1 || (vals.back() == 12 && vals[3] == 10))) isStraight = true;
 
-    if (isStraight && isFlush && vals.back() == 16 && vals[3] == 14) return 10000;
+    if (isStraight && isFlush && vals.back() == 15 && vals[3] == 14) return 10000;
 
     if (isStraight && isFlush) {
-        int tmpv = vals.back() == 16 ? vals[3] : vals.back();
+        int tmpv = vals.back() == 15 ? vals[3] : vals.back();
         return 9000 + tmpv * 10;
     }
 
@@ -125,7 +125,6 @@ int main() {
         }
         vector<Card> h1, h2;
         for (int i = 0; i < 5; i++) {
-            // cout << tmp1[i] << " " << tmp2[i] << endl;
             int x1, x2;
             if (isdigit(tmp1[i][0])) {
                 x1 = tmp1[i][0] - '0';
@@ -139,7 +138,6 @@ int main() {
             }
             char s1 = tmp1[i][1];
             char s2 = tmp2[i][1];
-            // cout << x1 << " " << s1 << " " << x2 << " " << s2 << endl;
             h1.push_back({x1, s1});
             h2.push_back({x2, s2});
         }
@@ -153,23 +151,8 @@ int main() {
         int ea = evaluate(a[i]);
         vector<int> ca = cl;
         int eb = evaluate(b[i]);
-        // cout << ea << " " << eb << endl;
         vector<int> cb = cl;
-        if ((ea > 2000 && ea < 3000) && (eb > 2000 && eb < 3000)) {
-            cout << ea << " " << eb << endl;
-            for (int t = 0; t < a[i].size(); t++) {
-                cout << a[i][t].num << " " << a[i][t].sign << " " << b[i][t].num << " " << b[i][t].sign << endl;
-            }
-            cout << endl;
-        }
-        // if (ea / 1000 == eb / 1000 && ea > 1000) {
-        // cout << ea << " " << eb << " " << (ea == eb) << endl;
-        // if (ea == eb) {
-        // for (int t = 0; t < a[i].size(); t++) {
-        //     cout << a[i][t].num << " " << a[i][t].sign << " " << b[i][t].num << " " << b[i][t].sign << endl;
-        // }
-        // }
-        // }
+
         if (ea > eb) {
             p1++;
         } else if (ea == eb) {
